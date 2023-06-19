@@ -1,0 +1,59 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  @import '../../reusable-styles/reg-auth-shadow.scss';
+  .form-wrapper {
+    width: 938px;
+    height: 100%;
+    border-radius: 6px;
+    .form {
+      background-color: white;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      padding: 48px 32px;
+      .title {
+        h4 {
+          font-family: 'Roboto', sans-serif;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 20px;
+          line-height: 28px;
+          text-align: center;
+          color: #262626;
+
+          margin: 0 0 21px 0;
+        }
+      }
+      @import '../../reusable-styles/form-inputs.scss';
+      .tags {
+        p {
+          font-family: 'Roboto';
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 22px;
+          margin: 0 0 2px 0;
+        }
+      }
+      .tags-wrapper {
+        div {
+          display: flex;
+          flex-flow: row nowrap;
+          column-gap: 17px;
+          input {
+            width: 300px;
+          }
+        }
+      }
+      hr {
+        margin-top: 21px;
+        border: 1px solid #e8e8e8;
+      }
+      .submit-wrapper {
+        width: 319px;
+        @import '../../reusable-styles/form-offer-bottom.scss';
+      }
+    }
+  }
+}

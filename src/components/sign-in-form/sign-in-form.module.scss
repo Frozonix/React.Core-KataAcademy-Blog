@@ -1,0 +1,105 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  @import '../../reusable-styles/reg-auth-shadow.scss';
+  .form-wrapper {
+    width: 384px;
+    height: 100%;
+    border-radius: 6px;
+    .reg-form {
+      background-color: white;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      padding: 48px 32px;
+      .title {
+        h4 {
+          font-family: 'Roboto', sans-serif;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 20px;
+          line-height: 28px;
+          text-align: center;
+          color: #262626;
+
+          margin: 0 0 21px 0;
+        }
+      }
+      @import '../../reusable-styles/form-inputs.scss';
+      hr {
+        margin-top: 21px;
+        border: 1px solid #e8e8e8;
+      }
+      .submit-wrapper {
+        div {
+          margin: 8px 0 21px 0;
+          flex-flow: row nowrap;
+          align-items: flex-start;
+          column-gap: 8px;
+          div input {
+            padding: 0;
+            height: initial;
+            width: initial;
+            margin-bottom: 0;
+            display: none;
+            cursor: pointer;
+          }
+          div label {
+            display: flex;
+            flex: 0 0 auto;
+            position: relative;
+            cursor: pointer;
+
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 22px;
+            color: #595959;
+            user-select: none;
+
+            margin: 0;
+          }
+          div label:before {
+            content: '';
+            -webkit-appearance: none;
+            background-color: transparent;
+            border: 1px solid #1890ff;
+            border-radius: 2px;
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            position: relative;
+            vertical-align: middle;
+            cursor: pointer;
+            margin-right: 8px;
+            flex: 0 0 auto;
+            margin-top: 3px;
+          }
+          div input:checked + label:before {
+            content: '';
+            background-color: #1890ff;
+          }
+          div input:checked + label:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 2px;
+            left: 5.6px;
+            width: 4px;
+            height: 9px;
+            border: solid white;
+            border-width: 0 2.2px 2.2px 0;
+            transform: rotate(45deg);
+            flex: 0 0 auto;
+            margin-top: 3px;
+          }
+        }
+        button {
+          margin-top: 9px;
+        }
+        @import '../../reusable-styles/form-offer-bottom.scss';
+      }
+    }
+  }
+}

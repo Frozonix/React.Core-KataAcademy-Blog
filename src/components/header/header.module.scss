@@ -1,0 +1,66 @@
+header {
+  width: 100%;
+  height: 80px;
+  background-color: white;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  .logo {
+    margin-left: 22px;
+    cursor: pointer;
+    a {
+      text-decoration: none;
+    }
+    span {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      line-height: 28px;
+      color: rgba(0, 0, 0, 0.85);
+    }
+  }
+  .interface {
+    margin-right: 22px;
+    height: inherit;
+    display: flex;
+    align-items: center;
+    button {
+      cursor: pointer;
+      width: 109px;
+      height: 51px;
+
+      font-size: 18px;
+      line-height: 28px;
+    }
+    .sign-in {
+      background-color: transparent;
+      border: none;
+      color: black;
+    }
+    .sign-up {
+      margin-left: 6px;
+      background-color: transparent;
+      border: 1px solid #52c41a;
+      border-radius: 5px;
+      color: #52c41a;
+    }
+    .create-article {
+      background-color: transparent;
+      border: 1px solid #52c41a;
+      border-radius: 5px;
+      color: #52c41a;
+
+      width: 112px;
+      height: 31px;
+      font-size: 14px;
+      line-height: 22px;
+    }
+    .log-out {
+      background-color: transparent;
+      border: 1px solid rgba(0, 0, 0, 0.75);
+      border-radius: 5px;
+      color: rgba(0, 0, 0, 0.75);
+    }
+  }
+}

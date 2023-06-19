@@ -1,0 +1,108 @@
+.wrapper {
+  background-color: white;
+  height: 100%;
+}
+
+.list-item {
+  cursor: default;
+  .item-preview {
+    p {
+      color: rgba(0, 0, 0, 0.5) !important;
+    }
+  }
+}
+.article {
+  font-size: 18px;
+  line-height: 28px;
+  color: rgba(0, 0, 0, 0.75);
+  padding: 0px 19px 100px 19px;
+  p {
+    margin: 0;
+  }
+}
+
+// .list-item2 {
+//   cursor: default;
+//   .wrapper {
+//     display: flex;
+//     flex-flow: row nowrap;
+
+//     padding: 16px 14px 24px 19px;
+//   }
+//   .left-side {
+//     .item-title-block {
+//       display: flex;
+//       flex-flow: row nowrap;
+//       h5 {
+//         font-size: 20px;
+//         line-height: 28px;
+//         color: #1890ff;
+//         margin: 0;
+//         font-weight: 400;
+//       }
+//       p {
+//         margin: 0;
+//         margin-left: 13px;
+//         color: rgba(0, 0, 0, 0.75);
+//         span {
+//           font-size: 22px;
+//           position: relative;
+//           top: 2px;
+//         }
+//       }
+//     }
+//     .tags {
+//       margin: 5px 0 8px 0;
+//       span {
+//         font-size: 12px;
+//         line-height: 15px;
+//         color: rgba(0, 0, 0, 0.5);
+
+//         border: 1px solid rgba(0, 0, 0, 0.5);
+//         border-radius: 2px;
+
+//         padding: 2px 5px;
+//       }
+//     }
+//     .item-body {
+//       p {
+//         font-size: 12px;
+//         line-height: 22px;
+//         color: rgba(0, 0, 0, 0.5);
+//         margin: 0;
+//       }
+//     }
+//   }
+//   .right-side {
+//     display: flex;
+//     flex-flow: row nowrap;
+//     justify-content: center;
+//     flex: 0 0 240px;
+//     .author-date-wrapper {
+//       margin-left: auto;
+//       h6 {
+//         font-size: 18px;
+//         font-style: normal;
+//         line-height: 28px;
+//         color: rgba(0, 0, 0, 0.85);
+//         font-weight: 400;
+//         margin: 0;
+//       }
+//       p {
+//         font-size: 12px;
+//         line-height: 22px;
+//         color: rgba(0, 0, 0, 0.5);
+
+//         margin: 0;
+//       }
+//     }
+//   }
+//   .author-img {
+//     width: 46px;
+//     height: 46px;
+//     background-color: #1890ff;
+//     border-radius: 50%;
+//     flex: 0 0 46px;
+//     margin-left: 12px;
+//   }
+// }

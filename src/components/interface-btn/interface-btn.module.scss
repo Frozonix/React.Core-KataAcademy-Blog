@@ -1,0 +1,35 @@
+span button.btn {
+  background-color: transparent;
+  border: 1px solid #52c41a;
+  border-radius: 5px;
+  color: #52c41a;
+  padding: 0 14px;
+
+  width: unset !important;
+  font-size: 14px !important;
+  line-height: 22px !important;
+
+  cursor: pointer;
+}
+
+span button.btn-red {
+  border: 1px solid #f5222d !important;
+  color: #f5222d !important;
+}
+
+span button.btn-blue {
+  border: 1px solid #1890ff !important;
+  color: #1890ff !important;
+}
+
+// button.btn {
+//   background-color: transparent;
+//   border: 1px solid #52c41a;
+//   border-radius: 5px;
+//   color: #52c41a;
+
+//   width: 112px;
+//   height: 31px;
+//   font-size: 14px;
+//   line-height: 22px;
+// }

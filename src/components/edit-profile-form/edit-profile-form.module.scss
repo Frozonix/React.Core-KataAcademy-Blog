@@ -1,0 +1,41 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  @import '../../reusable-styles/reg-auth-shadow.scss';
+  .form-wrapper {
+    width: 384px;
+    height: 100%;
+    border-radius: 6px;
+    .form {
+      background-color: white;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      padding: 48px 32px;
+      .title {
+        h4 {
+          font-family: 'Roboto', sans-serif;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 20px;
+          line-height: 28px;
+          text-align: center;
+          color: #262626;
+
+          margin: 0 0 21px 0;
+        }
+      }
+      @import '../../reusable-styles/form-inputs.scss';
+      hr {
+        margin-top: 21px;
+        border: 1px solid #e8e8e8;
+      }
+      .submit-wrapper {
+        button {
+          margin-top: 9px;
+        }
+        @import '../../reusable-styles/form-offer-bottom.scss';
+      }
+    }
+  }
+}

@@ -1,0 +1,107 @@
+// .link-wrapper {
+//   text-decoration: none;
+//   cursor: pointer;
+// }
+// .list-item {
+//   width: 100%;
+//   height: 140px;
+
+//   background-color: white;
+//   .wrapper {
+//     display: flex;
+//     flex-flow: row nowrap;
+
+//     padding: 16px 14px 24px 19px;
+//   }
+//   .left-side {
+//     .item-title-block {
+//       display: flex;
+//       flex-flow: row nowrap;
+//       h5 {
+//         font-size: 20px;
+//         line-height: 28px;
+//         color: #1890ff;
+//         margin: 0;
+//         font-weight: 400;
+//       }
+//       p {
+//         margin: 4.2px 0 0 13px;
+//         color: rgba(0, 0, 0, 0.75);
+//         user-select: none;
+
+//         label {
+//           font-size: 20px;
+//           position: relative;
+//           top: 1px;
+//           color: rgba(0, 0, 0, 0.75);
+//           cursor: pointer;
+//         }
+
+//         input[type='checkbox'] {
+//           display: none;
+//         }
+
+//         input[type='checkbox'] + label {
+//           position: relative;
+//           padding-left: 20px;
+//           display: inline-block;
+//           font-size: 16px;
+//         }
+
+//         input[type='checkbox'] + label:before {
+//           content: '❤';
+//           //  top: 0px;
+//           left: -1px;
+//           display: block;
+//           position: absolute;
+//           color: white;
+//           -webkit-text-stroke: 1px rgba(0, 0, 0, 0.75);
+//         }
+
+//         input[type='checkbox']:checked + label:before {
+//           left: -1px;
+//           display: block;
+//           position: absolute;
+//           color: #ff0707;
+//           -webkit-text-stroke: 1px #ff0707;
+//         }
+//       }
+//     }
+//     .tags {
+//       margin: 5px 0 8px 0;
+//       span {
+//         font-size: 12px;
+//         line-height: 15px;
+//         color: rgba(0, 0, 0, 0.5);
+
+//         border: 1px solid rgba(0, 0, 0, 0.5);
+//         border-radius: 2px;
+
+//         padding: 2px 5px;
+//       }
+//     }
+//     .item-preview {
+//       p {
+//         font-size: 12px;
+//         line-height: 22px;
+//         color: rgba(0, 0, 0, 0.75);
+//         margin: 0;
+//       }
+//     }
+//   }
+//   .right-side {
+//     display: flex;
+//     //  flex-flow: row nowrap;
+//     //  justify-content: center;
+//     flex: 0 0 240px;
+//     position: relative;
+//   }
+//   .interface-btns {
+//     display: flex;
+//     flex-flow: row wrap;
+//     column-gap: 12px;
+//     position: absolute;
+//     right: 0;
+//     bottom: 0;
+//   }
+// }
