@@ -1,24 +1,33 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Route, Routes, Link } from 'react-router-dom'
 
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { ProfileImage } from '../profile-image/profile-image'
 import { InterfaceBtn } from '../interface-btn/interface-btn'
+import { getUser, userLogout } from '../../store/userSlice'
 
 import styles from './header.module.scss'
 
 export function Header() {
-  const [auth, setAuth] = useState(false)
-
+  const dispatch = useAppDispatch()
+  const { auth, userData } = useAppSelector((state) => state.user)
+  console.log(auth)
+  //   const [auth, setAuth] = useState(false)
+  useEffect(() => {
+    if (auth) {
+      dispatch(getUser())
+    }
+  }, [auth, dispatch])
   function renderInterface() {
     if (auth) {
       return (
         <div className={styles.interface}>
-          <Link to="/create-new-article">
+          <Link to="/new-article">
             <InterfaceBtn text="Create article" padding={10} height="31px" />
           </Link>
-          {/* <ProfileImage header /> */}
+          <ProfileImage header authorDataItem={userData} created="" list={false} />
           {/* <Link to="/sign-up"> */}
-          <button type="button" className={styles['log-out']}>
+          <button type="button" className={styles['log-out']} onClick={() => dispatch(userLogout())}>
             Log Out
           </button>
           {/* </Link> */}

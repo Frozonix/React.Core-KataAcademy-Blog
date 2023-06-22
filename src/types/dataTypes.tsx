@@ -9,8 +9,8 @@ export type articleType = {
   body: string
   createdAt: string
   description: string
-  favorited: false
-  favoritesCount: boolean
+  favorited: boolean
+  favoritesCount: number
   slug: string
   tagList: string[]
   title: string

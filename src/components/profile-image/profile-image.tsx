@@ -1,24 +1,35 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Route, Routes, Link } from 'react-router-dom'
 
+import { useAppSelector } from '../../store/hooks'
 import { InterfaceBtn } from '../interface-btn/interface-btn'
 import { authorType } from '../../types/dataTypes'
 
 import styles from './profile-image.module.scss'
 
+type headerDataType = {
+  user: {
+    username: string
+    email: string
+    token: string
+  }
+}
+
 type profileImage = {
   header: boolean
-  authorDataItem: authorType
+  authorDataItem: any
   created: string
   list: boolean
+  slug?: string
 }
-export function ProfileImage({ header, authorDataItem, created, list }: profileImage) {
-  const auth = true
-  //   console.log(styles)
-  //   const margin = auth ? 'author-date-wrapper__margin' : null
 
-  console.log(new Date(created))
+const defaultProps = {
+  slug: '',
+}
 
+export function ProfileImage({ header, authorDataItem, created, list, slug }: profileImage) {
+  const { auth, userData } = useAppSelector((state) => state.user)
+  //   console.log(authorDataItem)
   function getDateText() {
     const date = new Date(created)
     const day = String(date.getDate()).padStart(2, '0')
@@ -26,30 +37,40 @@ export function ProfileImage({ header, authorDataItem, created, list }: profileI
 
     return `${month} ${day}, ${date.getFullYear()}`
   }
-
   if (header && auth) {
     return (
       <div className={styles['author-header']}>
         <div className={styles['author-date-wrapper']}>
-          <Link to="/edit-profile">
-            <h6 style={{ cursor: 'pointer' }}>John Doe</h6>
+          <Link to="/profile">
+            <h6 style={{ cursor: 'pointer' }}>{authorDataItem.username}</h6>
           </Link>
         </div>
-        <div className={styles['author-img']} />
+        <div className={styles['author-img']}>
+          <img
+            src={
+              authorDataItem.image ? authorDataItem.image : 'https://static.productionready.io/images/smiley-cyrus.jpg'
+            }
+            alt="avatar"
+          />
+        </div>
       </div>
     )
   }
 
   const renderBtns = () => {
-    if (auth && !list) {
-      return (
-        <div className={styles['interface-btns']}>
-          <InterfaceBtn text="Delete" padding={17} height="31px" />
-          <Link to="/edit-article">
-            <InterfaceBtn text="Edit" padding={19} height="31px" />
-          </Link>
-        </div>
-      )
+    //  console.log(slug)
+    if (userData) {
+      // console.log(userData.username, authorDataItem.username)
+      if (auth && !list && userData.username === authorDataItem.username) {
+        return (
+          <div className={styles['interface-btns']}>
+            <InterfaceBtn text="Delete" padding={17} height="31px" click={() => console.log('is delete')} />
+            <Link to={`/articles/${slug}/edit`}>
+              <InterfaceBtn text="Edit" padding={19} height="31px" />
+            </Link>
+          </div>
+        )
+      }
     }
     return null
   }
@@ -61,9 +82,16 @@ export function ProfileImage({ header, authorDataItem, created, list }: profileI
         <p>{getDateText()}</p>
       </div>
       <div className={styles['author-img']}>
-        <img src={authorDataItem.image} alt="avatar" />
+        <img
+          src={
+            authorDataItem.image ? authorDataItem.image : 'https://static.productionready.io/images/smiley-cyrus.jpg'
+          }
+          alt="avatar"
+        />
       </div>
       {renderBtns()}
     </div>
   )
 }
+
+ProfileImage.defaultProps = defaultProps

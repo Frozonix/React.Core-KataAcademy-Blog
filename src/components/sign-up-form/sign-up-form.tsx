@@ -3,6 +3,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+
+import { useAppDispatch } from '../../store/hooks'
+// eslint-disable-next-line import/order
+import { postReg } from '../../store/userSlice'
+
+// eslint-disable-next-line import/order
+import { InputError } from '../input-error/input-error'
 import '../../reusable-styles/form-errors.scss'
 
 import { SubmitBtn } from '../submit-btn/submit-btn'
@@ -10,6 +17,7 @@ import { SubmitBtn } from '../submit-btn/submit-btn'
 import styles from './sign-up-form.module.scss'
 
 export function SignUpForm() {
+  const dispatch = useAppDispatch()
   const htmlFor = {
     username: 'username-reg',
     email: 'email-reg',
@@ -25,8 +33,14 @@ export function SignUpForm() {
   } = useForm({ mode: 'onBlur' })
 
   const myHandleSubmit = (data: any) => {
-    alert(JSON.stringify(data))
-    console.log(getValues(htmlFor.password))
+    dispatch(
+      postReg({
+        username: data[htmlFor.username],
+        email: data[htmlFor.email],
+        password: data[htmlFor.password],
+        image: 'https://static.productionready.io/images/smiley-cyrus.jpg',
+      })
+    )
   }
 
   return (
@@ -58,9 +72,7 @@ export function SignUpForm() {
                   })}
                 />
               </label>
-              <div className="form-error">
-                {errors[htmlFor.username] && <p>{errors[htmlFor.username]?.message?.toString()}</p>}
-              </div>
+              <InputError errors={errors} name={htmlFor.username} />
             </div>
             <div>
               <label htmlFor={htmlFor.email}>
@@ -80,9 +92,7 @@ export function SignUpForm() {
                   })}
                 />
               </label>
-              <div className="form-error">
-                {errors[htmlFor.email] && <p>{errors[htmlFor.email]?.message?.toString()}</p>}
-              </div>
+              <InputError errors={errors} name={htmlFor.email} />
             </div>
             <div>
               <label htmlFor={htmlFor.password}>
@@ -105,15 +115,13 @@ export function SignUpForm() {
                   })}
                 />
               </label>
-              <div className="form-error">
-                {errors[htmlFor.password] && <p>{errors[htmlFor.password]?.message?.toString()}</p>}
-              </div>
+              <InputError errors={errors} name={htmlFor.password} />
             </div>
             <div>
               <label htmlFor={htmlFor.repeatPassword}>
                 Repeat Password
                 <input
-                  style={errors[htmlFor.password] && { border: '1px solid #f5222d' }}
+                  style={errors[htmlFor.repeatPassword] && { border: '1px solid #f5222d' }}
                   type="password"
                   placeholder="Password"
                   id={htmlFor.repeatPassword}
@@ -125,9 +133,7 @@ export function SignUpForm() {
                   })}
                 />
               </label>
-              <div className="form-error">
-                {errors[htmlFor.repeatPassword] && <p>{errors[htmlFor.repeatPassword]?.message?.toString()}</p>}
-              </div>
+              <InputError errors={errors} name={htmlFor.repeatPassword} />
             </div>
           </div>
           <hr />

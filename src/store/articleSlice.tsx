@@ -2,6 +2,8 @@ import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { articleType } from '../types/dataTypes'
 
+import { useAppSelector } from './hooks'
+
 type payload = {
   article: articleType
 }
@@ -19,16 +21,117 @@ const initialState: initArticleType = {
 
 // eslint-disable-next-line
 export const getArticle = createAsyncThunk(
-  'articles/getArticle',
+  'article/getArticle',
+  // eslint-disable-next-line consistent-return
   async (slug: string | undefined, { rejectWithValue }) => {
     const url = `https://blog.kata.academy/api/articles/${slug}`
-    const responce = await fetch(url)
-    if (!responce.ok) {
-      throw new Error(`Server Error: ${responce.status}`)
+    const token = localStorage.getItem('token')
+    try {
+      const responce = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${token}`,
+        },
+      })
+      if (!responce.ok) {
+        throw new Error(`Server Error: ${responce.status}`)
+      }
+      const outputData = await responce.json()
+      return outputData
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        return rejectWithValue(err.message.toString())
+      }
     }
-    const dataToJSON = await responce.json()
-    //   console.log(dataToJSON)
-    return dataToJSON
+  }
+)
+
+// eslint-disable-next-line
+export const postArticle = createAsyncThunk(
+  'article/postArticle',
+  // eslint-disable-next-line consistent-return
+  async (data: any, { rejectWithValue }) => {
+    //  здесь приходит объект [0] и токен [1]
+    const url = `https://blog.kata.academy/api/articles`
+    const body = { article: data[0] }
+    console.log(data[1])
+    try {
+      const responce = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${data[1] || ''}`,
+        },
+      })
+      if (!responce.ok) {
+        throw new Error(`Server Error: ${responce.status}`)
+      }
+      const outputData = await responce.json()
+      return outputData
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        return rejectWithValue(err.message.toString())
+      }
+    }
+  }
+)
+
+// eslint-disable-next-line
+export const putArticle = createAsyncThunk(
+  'article/putArticle',
+  // eslint-disable-next-line consistent-return
+  async (data: any, { rejectWithValue }) => {
+    //  здесь приходит объект [0] и токен [1] ([2] - это slug)
+    const url = `https://blog.kata.academy/api/articles/${data[2]}`
+    const body = { article: data[0] }
+    try {
+      const responce = await fetch(url, {
+        method: 'PUT',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${data[1] || ''}`,
+        },
+      })
+      if (!responce.ok) {
+        throw new Error(`Server Error: ${responce.status}`)
+      }
+      const outputData = await responce.json()
+      return outputData
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        return rejectWithValue(err.message.toString())
+      }
+    }
+  }
+)
+
+// eslint-disable-next-line
+export const deleteArticle = createAsyncThunk(
+  'article/deleteArticle',
+  // eslint-disable-next-line consistent-return
+  async (data: any, { rejectWithValue }) => {
+    //  токен [0] ([1] - это slug)
+    const url = `https://blog.kata.academy/api/articles/${data[1]}`
+    try {
+      const responce = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${data[0] || ''}`,
+        },
+      })
+      if (!responce.ok) {
+        throw new Error(`Server Error: ${responce.status}`)
+      }
+      const outputData = await responce.json()
+      return outputData
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        return rejectWithValue(err.message.toString())
+      }
+    }
   }
 )
 
@@ -49,8 +152,55 @@ const articleSlice = createSlice({
     })
     /* eslint-disable-next-line */
     // @ts-expect-error
-    builder.addCase(getArticle.rejected, (state, action: PayloadAction<[string, number]>) => {
+    builder.addCase(getArticle.rejected, (state, action: PayloadAction<string>) => {
       state.status = 'rejected'
+      state.error = action.payload
+    })
+
+    builder.addCase(postArticle.pending, (state) => {
+      state.status = 'loading'
+    })
+    builder.addCase(postArticle.fulfilled, (state, action: PayloadAction<payload>) => {
+      state.status = 'ok'
+      // state.data = action.payload.article
+      console.log(action.payload)
+      state.error = ''
+    })
+    /* eslint-disable-next-line */
+    // @ts-expect-error
+    builder.addCase(postArticle.rejected, (state, action: PayloadAction<string>) => {
+      state.status = 'rejected'
+      state.error = action.payload
+    })
+
+    builder.addCase(putArticle.pending, (state) => {
+      state.status = 'loading'
+    })
+    builder.addCase(putArticle.fulfilled, (state, action: PayloadAction<payload>) => {
+      state.status = 'ok'
+      console.log(action.payload)
+      state.error = ''
+    })
+    /* eslint-disable-next-line */
+    // @ts-expect-error
+    builder.addCase(putArticle.rejected, (state, action: PayloadAction<string>) => {
+      state.status = 'rejected'
+      state.error = action.payload
+    })
+
+    builder.addCase(deleteArticle.pending, (state) => {
+      state.status = 'loading'
+    })
+    builder.addCase(deleteArticle.fulfilled, (state, action: PayloadAction<payload>) => {
+      state.status = 'ok'
+      console.log(action.payload)
+      state.error = ''
+    })
+    /* eslint-disable-next-line */
+    // @ts-expect-error
+    builder.addCase(deleteArticle.rejected, (state, action: PayloadAction<string>) => {
+      state.status = 'rejected'
+      state.error = action.payload
     })
   },
 })

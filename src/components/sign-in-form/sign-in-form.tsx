@@ -3,14 +3,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import '../../reusable-styles/form-errors.scss'
 
+import { postLogin } from '../../store/userSlice'
+import { useAppDispatch } from '../../store/hooks'
+import { InputError } from '../input-error/input-error'
 import { SubmitBtn } from '../submit-btn/submit-btn'
 
 import styles from './sign-in-form.module.scss'
+
 import '../../reusable-styles/list-article-shadow.scss'
 
 export function SignInForm() {
+  const dispatch = useAppDispatch()
   const htmlFor = {
     email: 'email-auth',
     password: 'password-auth',
@@ -22,7 +26,12 @@ export function SignInForm() {
   } = useForm({ mode: 'onBlur' })
 
   const myHandleSubmit = (data: any) => {
-    alert(JSON.stringify(data))
+    dispatch(
+      postLogin({
+        email: data[htmlFor.email],
+        password: data[htmlFor.password],
+      })
+    )
   }
   return (
     <section className={styles.wrapper}>
@@ -40,7 +49,6 @@ export function SignInForm() {
                   type="text"
                   placeholder="Email address"
                   id={htmlFor.email}
-                  //  name={htmlFor.email}
                   {...register(htmlFor.email, {
                     required: 'Required field!',
                     validate: {
@@ -51,9 +59,7 @@ export function SignInForm() {
                   })}
                 />
               </label>
-              <div className="form-error">
-                {errors[htmlFor.email] && <p>{errors[htmlFor.email]?.message?.toString()}</p>}
-              </div>
+              <InputError errors={errors} name={htmlFor.email} />
             </div>
             <div>
               <label htmlFor={htmlFor.password}>
@@ -68,9 +74,7 @@ export function SignInForm() {
                   })}
                 />
               </label>
-              <div className="form-error">
-                {errors[htmlFor.password] && <p>{errors[htmlFor.password]?.message?.toString()}</p>}
-              </div>
+              <InputError errors={errors} name={htmlFor.password} />
             </div>
           </div>
           <div className={styles['submit-wrapper']}>

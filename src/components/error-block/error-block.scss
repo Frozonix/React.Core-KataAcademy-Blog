@@ -1,0 +1,15 @@
+.error-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  background-color: lightcoral;
+  border-radius: 6px;
+  border: 1px solid red;
+  width: 100%;
+  p {
+    font-family: 'Roboto';
+    font-size: 18px;
+    color: white;
+    margin: 14px;
+  }
+}

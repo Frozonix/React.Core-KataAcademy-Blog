@@ -9,15 +9,26 @@ const initialState: initType = {
 }
 
 // eslint-disable-next-line
-export const getData = createAsyncThunk('articles/getData', async (_, { rejectWithValue }) => {
-  const url = `https://blog.kata.academy/api/articles`
-  const responce = await fetch(url)
-  if (!responce.ok) {
-    throw new Error(`Server Error: ${responce.status}`)
+export const getData = createAsyncThunk('articles/getData', async (data: [number, boolean], { rejectWithValue }) => {
+  const url = `https://blog.kata.academy/api/articles?limit=20&offset=${data[0] * 20 - 20}`
+  const token = data[1] ? localStorage.getItem('token') : ''
+  try {
+    const responce = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    })
+    if (!responce.ok) {
+      throw new Error(`Server Error: ${responce.status}`)
+    }
+    const outputData = await responce.json()
+    return outputData
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return rejectWithValue(err.message.toString())
+    }
   }
-  const dataToJSON = await responce.json()
-  //   console.log(dataToJSON)
-  return dataToJSON
 })
 
 const allArticlesSlice = createSlice({
@@ -37,8 +48,8 @@ const allArticlesSlice = createSlice({
     })
     /* eslint-disable-next-line */
     // @ts-expect-error
-    builder.addCase(getData.rejected, (state, action: PayloadAction<[string, number]>) => {
-      state.status = 'rejected'
+    builder.addCase(getData.rejected, (state, action: PayloadAction<string>) => {
+      state.error = action.payload
     })
   },
 })

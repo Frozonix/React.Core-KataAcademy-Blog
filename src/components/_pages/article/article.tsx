@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 
+import { ErrorBlock } from '../../error-block/error-block'
+import { Loading } from '../../loading/loading'
 import { ProfileImage } from '../../profile-image/profile-image'
 import { InterfaceBtn } from '../../interface-btn/interface-btn'
 import { ArticleItem } from '../../article-item/article-item'
@@ -16,21 +18,24 @@ import stylesArticle from './article.module.scss'
 export function Article() {
   const auth = true
   const dispatch = useAppDispatch()
+  const { userData } = useAppSelector((state) => state.user)
   const { data, status, error } = useAppSelector((state) => state.article)
   const { slug } = useParams()
+  //   let isLike = false
+  const [like, setLike] = useState<boolean>(false)
   useEffect(() => {
     async function get() {
       await dispatch(getArticle(slug))
     }
     get()
-  }, [dispatch, slug])
+  }, [dispatch, slug, like])
 
   const renderBtns = () => {
     if (auth) {
       return (
         <div className={styles['interface-btns']}>
           <InterfaceBtn text="Delete" padding={17} height="31px" />
-          <Link to="/edit-article">
+          <Link to={`/articles/${slug}/edit`}>
             <InterfaceBtn text="Edit" padding={19} height="31px" />
           </Link>
         </div>
@@ -40,21 +45,29 @@ export function Article() {
   }
 
   const renderArticle = () => {
-    if (data) {
-      console.log(data)
+    if (status === 'ok' && data) {
       // eslint-disable-next-line
       let author, body, createdAt, description, favorited, favoritesCount, slug, tagList, title, updatedAt
       ;({ author, body, createdAt, description, favorited, favoritesCount, slug, tagList, title, updatedAt } = data)
+      // isLike = favorited
+      // setLike(favorited)
+      console.log(data)
       return (
         <div className={`${stylesArticle.wrapper} list-article-shadow`}>
           <ArticleItem dataItem={data} list={false} />
           <div className={stylesArticle.article}>
-            <p>
+            <div>
               <ReactMarkdown>{body}</ReactMarkdown>
-            </p>
+            </div>
           </div>
         </div>
       )
+    }
+    if (status === 'loading') {
+      return <Loading />
+    }
+    if (status === 'rejected') {
+      return <ErrorBlock error={error} />
     }
     return null
   }

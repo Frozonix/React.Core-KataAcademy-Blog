@@ -9,6 +9,7 @@ import { SignIn } from '../_pages/sign-in/sign-in'
 import { EditProfile } from '../_pages/edit-profile/edit-profile'
 import { CreateNewArticle } from '../_pages/create-new-article/create-new-article'
 import { EditArticle } from '../_pages/edit-article/edit-article'
+import { useAppSelector } from '../../store/hooks'
 
 import styles from './App.module.scss'
 
@@ -21,9 +22,9 @@ export function App() {
         <Route path="articles/:slug" element={<Article />} />
         <Route path="sign-up" element={<SignUp />} />
         <Route path="sign-in" element={<SignIn />} />
-        <Route path="edit-profile" element={<EditProfile />} />
-        <Route path="create-new-article" element={<CreateNewArticle />} />
-        <Route path="edit-article" element={<EditArticle />} />
+        <Route path="profile" element={<EditProfile />} />
+        <Route path="new-article" element={<CreateNewArticle />} />
+        <Route path="articles/:slug/edit" element={<EditArticle />} />
       </Route>
     </Routes>
   )
