@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { Navigate } from 'react-router-dom'
 
 import { articleType } from '../types/dataTypes'
 
@@ -12,11 +13,13 @@ type initArticleType = {
   data: articleType | null
   status: string
   error: string
+  isRedirectNeeded: boolean
 }
 const initialState: initArticleType = {
   data: null,
   status: 'loading',
   error: '',
+  isRedirectNeeded: false,
 }
 
 // eslint-disable-next-line
@@ -139,7 +142,9 @@ const articleSlice = createSlice({
   name: 'article_item',
   initialState,
   reducers: {
-    //  allArticles(state, action: PayloadAction<[[boolean, boolean, boolean, boolean, boolean], number]>) {},
+    toggleRedirectNeeded(state) {
+      state.isRedirectNeeded = false
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getArticle.pending, (state) => {
@@ -162,9 +167,11 @@ const articleSlice = createSlice({
     })
     builder.addCase(postArticle.fulfilled, (state, action: PayloadAction<payload>) => {
       state.status = 'ok'
+
       // state.data = action.payload.article
       console.log(action.payload)
       state.error = ''
+      state.isRedirectNeeded = true
     })
     /* eslint-disable-next-line */
     // @ts-expect-error
@@ -180,6 +187,7 @@ const articleSlice = createSlice({
       state.status = 'ok'
       console.log(action.payload)
       state.error = ''
+      state.isRedirectNeeded = true
     })
     /* eslint-disable-next-line */
     // @ts-expect-error
@@ -205,7 +213,7 @@ const articleSlice = createSlice({
   },
 })
 
-// export const { allTickets, notAllTickets } = ticketsSlice.actions
+export const { toggleRedirectNeeded } = articleSlice.actions
 export default articleSlice.reducer
 
 // import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'

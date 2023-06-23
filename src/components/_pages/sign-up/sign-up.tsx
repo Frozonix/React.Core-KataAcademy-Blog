@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 
 import { ErrorBlock } from '../../error-block/error-block'
 import { SignUpForm } from '../../sign-up-form/sign-up-form'
-import { useAppSelector } from '../../../store/hooks'
+import { useAppSelector, useAppDispatch } from '../../../store/hooks'
 import { Loading } from '../../loading/loading'
+import { clearError } from '../../../store/userSlice'
 
 export function SignUp() {
   const { status, error, userData } = useAppSelector((state) => state.user)
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(clearError())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const renderPage = () => {
     if (status === 'loading') {
       return <Loading />

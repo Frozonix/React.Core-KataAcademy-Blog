@@ -1,6 +1,7 @@
-import React from 'react'
-import { Link, useLocation, Navigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
+/* eslint-disable react/jsx-props-no-spreading */
+import React, { useEffect } from 'react'
+import { Link, useLocation, Navigate, useNavigate } from 'react-router-dom'
+import { useForm, useFieldArray } from 'react-hook-form'
 
 import { putArticle } from '../../store/articleSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -14,11 +15,11 @@ import styles from './edit-article-form.module.scss'
 
 import '../../reusable-styles/reg-auth-shadow.scss'
 
-ModalDeleteArticle
-
 export function EditArticleForm() {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { userData } = useAppSelector((state) => state.user)
+  const { status, isRedirectNeeded } = useAppSelector((state) => state.article)
   const slug = useLocation().pathname.replace('/articles/', '').replace('/edit', '')
   const htmlFor = {
     title: 'title-new-article',
@@ -31,17 +32,28 @@ export function EditArticleForm() {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm({ mode: 'onBlur' })
+    control,
+    setValue,
+  } = useForm({ mode: 'onBlur', defaultValues: { tags: [{ tag: '' }] } })
+
+  useEffect(() => {
+    if (isRedirectNeeded) {
+      navigate('/')
+    }
+  }, [isRedirectNeeded, navigate])
 
   const myHandleSubmit = (data: any) => {
-    console.log('EEEDIIIITTTT')
+    const tagList = data.tags
+      .filter((item: { tag: string }) => item.tag.trim() !== '' && item.tag)
+      .map((item: { tag: string }) => item.tag)
+    console.log(tagList)
     dispatch(
       putArticle([
         {
           title: data[htmlFor.title],
           description: data[htmlFor.shortDescription],
           body: data[htmlFor.text],
-          tagList: ['hello'],
+          tagList,
         },
         userData.token,
         slug,
@@ -55,49 +67,14 @@ export function EditArticleForm() {
     <section className={styles.wrapper}>
       <div className={styles['form-wrapper']}>
         <form id="edit-article" className={styles.form} onSubmit={handleSubmit(myHandleSubmit)}>
-          <ReusableForm isCreateArticle={false} htmlFor={htmlFor} register={register} errors={errors} />
-          {/* <div className={styles.title}>
-            <h4>Edit article</h4>
-          </div>
-          <div className={styles['inputs-wrapper']}>
-            <div>
-
-              <label htmlFor={htmlFor.title}>Title</label>
-              <input type="text" placeholder="Title" id={htmlFor.title} name={htmlFor.title} />
-            </div>
-            <div>
-
-              <label htmlFor={htmlFor.shortDescription}>Short description</label>
-              <input
-                type="text"
-                placeholder="Description"
-                id={htmlFor.shortDescription}
-                name={htmlFor.shortDescription}
-              />
-            </div>
-            <div>
-
-              <label htmlFor={htmlFor.text}>Text</label>
-              <textarea placeholder="Text" id={htmlFor.text} name={htmlFor.text} />
-            </div>
-          </div>
-          <div className={`${styles['inputs-wrapper']} ${styles.tags}`}>
-            <p>Tags</p>
-            <div className={styles['tags-wrapper']}>
-              <div>
-                <input type="text" placeholder="Tag" id={`${htmlFor.tag}1`} name={`${htmlFor.tag}1`} />
-                <InterfaceBtn text="Delete" padding={37} height="100%" />
-              </div>
-              <div>
-                <input type="text" placeholder="Tag" id={`${htmlFor.tag}2`} name={`${htmlFor.tag}2`} />
-                <InterfaceBtn text="Delete" padding={37} height="100%" />
-                <InterfaceBtn text="Add tag" padding={40} height="100%" />
-              </div>
-            </div>
-          </div>
-          <div className={styles['submit-wrapper']}>
-            <SubmitBtn text="Send" form="registration" />
-          </div> */}
+          <ReusableForm
+            isCreateArticle={false}
+            htmlFor={htmlFor}
+            register={register}
+            errors={errors}
+            control={control}
+            setValue={setValue}
+          />
         </form>
       </div>
     </section>

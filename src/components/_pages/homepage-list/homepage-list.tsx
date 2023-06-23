@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 
+import { toggleRedirectNeeded } from '../../../store/articleSlice'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { Loading } from '../../loading/loading'
 import { getData } from '../../../store/allArticlesSlice'
@@ -17,8 +18,13 @@ export function HomepageList() {
   const [activePage, setActivePage] = useState([true, false, false, false, false])
   const dispatch = useAppDispatch()
   const { data, status, error } = useAppSelector((state) => state.articles)
+  //   const { isRedirectNeeded } = useAppSelector((state) => state.article)
   const { auth } = useAppSelector((state) => state.user)
   const maxPage = Math.ceil(data.articlesCount / 20)
+  useEffect(() => {
+    dispatch(toggleRedirectNeeded())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   useEffect(() => {
     async function get() {
       await dispatch(getData([currentPage, auth]))

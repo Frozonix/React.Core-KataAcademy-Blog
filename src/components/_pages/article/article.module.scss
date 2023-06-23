@@ -16,6 +16,13 @@
   line-height: 28px;
   color: rgba(0, 0, 0, 0.75);
   padding: 0px 19px 100px 19px;
+
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+  line-break: loose;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
   div {
     margin: 0;
   }

@@ -4,6 +4,7 @@ import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { dataType } from '../types/dataTypes'
 
 type initType = {
+  startRequest: boolean
   auth: boolean
   userData: any
   token: string
@@ -12,6 +13,7 @@ type initType = {
 }
 
 const initialState: initType = {
+  startRequest: false,
   auth: false,
   userData: null,
   token: '',
@@ -196,6 +198,12 @@ const userSlice = createSlice({
       localStorage.removeItem('email')
       localStorage.removeItem('password')
     },
+    toggleFirstRequest(state) {
+      state.startRequest = true
+    },
+    clearError(state) {
+      state.error = ''
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(postReg.pending, (state) => {
@@ -226,6 +234,7 @@ const userSlice = createSlice({
       state.userData = action.payload[0].user
       state.status = 'ok'
       state.error = ''
+      state.startRequest = true
       localStorage.setItem('token', action.payload[0].user.token)
       localStorage.setItem('email', action.payload[1].email)
       localStorage.setItem('password', action.payload[1].password)
@@ -235,6 +244,7 @@ const userSlice = createSlice({
     // @ts-expect-error
     builder.addCase(postLogin.rejected, (state, action: PayloadAction<string>) => {
       state.status = 'rejected'
+      state.startRequest = true
       state.error = action.payload
       console.log(action.payload)
     })
@@ -299,7 +309,7 @@ const userSlice = createSlice({
 })
 
 // export const { allTickets, notAllTickets } = ticketsSlice.actions
-export const { userLogout } = userSlice.actions
+export const { userLogout, toggleFirstRequest, clearError } = userSlice.actions
 export default userSlice.reducer
 
 // import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'

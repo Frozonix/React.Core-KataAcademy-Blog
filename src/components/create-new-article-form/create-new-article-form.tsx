@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 import { postArticle } from '../../store/articleSlice'
@@ -18,7 +18,9 @@ import '../../reusable-styles/reg-auth-shadow.scss'
 
 export function CreateNewArticleForm() {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { userData } = useAppSelector((state) => state.user)
+  const { isRedirectNeeded } = useAppSelector((state) => state.article)
   const htmlFor = {
     title: 'title-new-article',
     shortDescription: 'short-desc-new-article',
@@ -29,16 +31,27 @@ export function CreateNewArticleForm() {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm({ mode: 'onBlur' })
+    control,
+    setValue,
+  } = useForm({ mode: 'onBlur', defaultValues: { tags: [{ tag: '' }] } })
+
+  useEffect(() => {
+    if (isRedirectNeeded) {
+      navigate('/')
+    }
+  }, [isRedirectNeeded, navigate])
 
   const myHandleSubmit = (data: any) => {
+    const tagList = data.tags
+      .filter((item: { tag: string }) => item.tag.trim() !== '' && item.tag)
+      .map((item: { tag: string }) => item.tag)
     dispatch(
       postArticle([
         {
           title: data[htmlFor.title],
           description: data[htmlFor.shortDescription],
           body: data[htmlFor.text],
-          tagList: ['hello'],
+          tagList,
         },
         userData.token,
       ])
@@ -51,70 +64,14 @@ export function CreateNewArticleForm() {
     <section className={styles.wrapper}>
       <div className={styles['form-wrapper']}>
         <form id="create-new-article" className={styles.form} onSubmit={handleSubmit(myHandleSubmit)}>
-          <ReusableForm isCreateArticle htmlFor={htmlFor} register={register} errors={errors} />
-          {/* <div className={styles.title}>
-            <h4>Create new article</h4>
-          </div>
-          <div className={styles['inputs-wrapper']}>
-            <div>
-              <label htmlFor={htmlFor.title}>
-                Title{' '}
-                <input
-                  type="text"
-                  placeholder="Title"
-                  id={htmlFor.title}
-                  {...register(htmlFor.title, {
-                    required: 'Required field!',
-                  })}
-                />
-              </label>
-              <InputError errors={errors} name={htmlFor.title} />
-            </div>
-            <div>
-              <label htmlFor={htmlFor.shortDescription}>
-                Short description
-                <input
-                  type="text"
-                  placeholder="Description"
-                  id={htmlFor.shortDescription}
-                  {...register(htmlFor.shortDescription, {
-                    required: 'Required field!',
-                  })}
-                />
-              </label>
-              <InputError errors={errors} name={htmlFor.shortDescription} />
-            </div>
-            <div>
-              <label htmlFor={htmlFor.text}>
-                Text
-                <textarea
-                  placeholder="Text"
-                  id={htmlFor.text}
-                  {...register(htmlFor.text, {
-                    required: 'Required field!',
-                  })}
-                />
-              </label>
-              <InputError errors={errors} name={htmlFor.text} />
-            </div>
-          </div>
-          <div className={`${styles['inputs-wrapper']} ${styles.tags}`}>
-            <p>Tags</p>
-            <div className={styles['tags-wrapper']}>
-              <div>
-                <input type="text" placeholder="Tag" id={`${htmlFor.tag}1`} name={`${htmlFor.tag}1`} />
-                <InterfaceBtn text="Delete" padding={37} height="100%" />
-              </div>
-              <div>
-                <input type="text" placeholder="Tag" id={`${htmlFor.tag}2`} name={`${htmlFor.tag}2`} />
-                <InterfaceBtn text="Delete" padding={37} height="100%" />
-                <InterfaceBtn text="Add tag" padding={40} height="100%" />
-              </div>
-            </div>
-          </div>
-          <div className={styles['submit-wrapper']}>
-            <SubmitBtn text="Send" form="create-new-article" />
-          </div> */}
+          <ReusableForm
+            isCreateArticle
+            htmlFor={htmlFor}
+            register={register}
+            errors={errors}
+            control={control}
+            setValue={setValue}
+          />
         </form>
       </div>
     </section>
