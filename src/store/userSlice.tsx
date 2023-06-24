@@ -3,6 +3,8 @@ import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { handleSubmitType } from '../types/dataTypes'
 
+import { fetchWrapper } from './fetchWrapper'
+
 type initType = {
   startRequest: boolean
   auth: boolean
@@ -47,144 +49,34 @@ type authRequestType = [regRequestType, { email: string; password: string }]
 export const postReg = createAsyncThunk('user/postReg', async (data: regDataType, { rejectWithValue }) => {
   const url = `https://blog.kata.academy/api/users`
   const body = { user: data }
-  try {
-    const responce = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    if (!responce.ok) {
-      throw new Error(`Server Error: ${responce.status}`)
-    }
-    const outputData = await responce.json()
-    return outputData
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      return rejectWithValue(err.message.toString())
-    }
-  }
+  return fetchWrapper(url, 'POST', rejectWithValue, body)
 })
 
 export const postLogin = createAsyncThunk('user/postLogin', async (data: loginDataType, { rejectWithValue }) => {
   const url = `https://blog.kata.academy/api/users/login`
   const body = { user: data }
-  const token = localStorage.getItem('token')
-  try {
-    const responce = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token || ''}`,
-      },
-    })
-    if (!responce.ok) {
-      throw new Error(`Server Error: ${responce.status}`)
-    }
-
-    const outputData = await responce.json()
-    return [outputData, data]
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      return rejectWithValue(err.message.toString())
-    }
-  }
+  return fetchWrapper(url, 'POST', rejectWithValue, body, data)
 })
 
 export const getUser = createAsyncThunk('user/getUser', async (_, { rejectWithValue }) => {
   const url = `https://blog.kata.academy/api/user`
-  const token = localStorage.getItem('token')
-  try {
-    const responce = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token || ''}`,
-      },
-    })
-    if (!responce.ok) {
-      throw new Error(`Server Error: ${responce.status}`)
-    }
-    const outputData = await responce.json()
-    return outputData
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      return rejectWithValue(err.message.toString())
-    }
-  }
+  return fetchWrapper(url, 'GET', rejectWithValue)
 })
 
 export const putUserData = createAsyncThunk('user/putUserData', async (data: handleSubmitType, { rejectWithValue }) => {
   const url = `https://blog.kata.academy/api/user`
   const body = { user: data }
-  const token = localStorage.getItem('token')
-  try {
-    const responce = await fetch(url, {
-      method: 'PUT',
-      body: JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token || ''}`,
-      },
-    })
-    if (!responce.ok) {
-      throw new Error(`Server Error: ${responce.status}`)
-    }
-    const outputData = await responce.json()
-    return outputData
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      return rejectWithValue(err.message.toString())
-    }
-  }
+  return fetchWrapper(url, 'PUT', rejectWithValue, body)
 })
 
 export const postLike = createAsyncThunk('user/postLike', async (slug: string, { rejectWithValue }) => {
   const url = `https://blog.kata.academy/api/articles/${slug}/favorite`
-  const token = localStorage.getItem('token')
-  try {
-    const responce = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token || ''}`,
-      },
-    })
-    if (!responce.ok) {
-      throw new Error(`Server Error: ${responce.status}`)
-    }
-    const outputData = await responce.json()
-    return outputData
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      return rejectWithValue(err.message.toString())
-    }
-  }
+  return fetchWrapper(url, 'POST', rejectWithValue)
 })
 
 export const deleteLike = createAsyncThunk('user/deleteLike', async (slug: string, { rejectWithValue }) => {
   const url = `https://blog.kata.academy/api/articles/${slug}/favorite`
-  const token = localStorage.getItem('token')
-  try {
-    const responce = await fetch(url, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token || ''}`,
-      },
-    })
-    if (!responce.ok) {
-      throw new Error(`Server Error: ${responce.status}`)
-    }
-    const outputData = await responce.json()
-    return outputData
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      return rejectWithValue(err.message.toString())
-    }
-  }
+  return fetchWrapper(url, 'DELETE', rejectWithValue)
 })
 
 const userSlice = createSlice({
@@ -221,11 +113,6 @@ const userSlice = createSlice({
       state.error = action.payload
     })
 
-    builder.addCase(postLogin.pending, (state) => {
-      state.status = 'loading'
-    })
-    /* eslint-disable-next-line */
-    // @ts-expect-error
     builder.addCase(postLogin.fulfilled, (state, action: PayloadAction<authRequestType>) => {
       state.auth = true
       state.userData = action.payload[0].user

@@ -2,7 +2,7 @@ import React from 'react'
 import { useLocation, Link } from 'react-router-dom'
 
 import { deleteArticle } from '../../store/articleSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { useAppDispatch } from '../../store/hooks'
 import './modal-delete-article.scss'
 
 type ModalDeleteArticleProps = {

@@ -2,6 +2,8 @@ import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { dataType, initType } from '../types/dataTypes'
 
+import { fetchWrapper } from './fetchWrapper'
+
 const initialState: initType = {
   data: { articles: [], articlesCount: 0 },
   status: 'loading',
@@ -11,24 +13,7 @@ const initialState: initType = {
 // eslint-disable-next-line
 export const getData = createAsyncThunk('articles/getData', async (data: [number, boolean], { rejectWithValue }) => {
   const url = `https://blog.kata.academy/api/articles?limit=20&offset=${data[0] * 20 - 20}`
-  const token = data[1] ? localStorage.getItem('token') : ''
-  try {
-    const responce = await fetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
-      },
-    })
-    if (!responce.ok) {
-      throw new Error(`Server Error: ${responce.status}`)
-    }
-    const outputData = await responce.json()
-    return outputData
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      return rejectWithValue(err.message.toString())
-    }
-  }
+  return fetchWrapper(url, 'GET', rejectWithValue)
 })
 
 const allArticlesSlice = createSlice({
