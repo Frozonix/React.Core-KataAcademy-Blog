@@ -88,6 +88,7 @@ const userSlice = createSlice({
     userLogout(state) {
       state.auth = false
       state.userData = null
+      localStorage.removeItem('token')
       localStorage.removeItem('email')
       localStorage.removeItem('password')
     },
