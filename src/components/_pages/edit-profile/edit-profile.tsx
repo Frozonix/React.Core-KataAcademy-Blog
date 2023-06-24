@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 import { ErrorBlock } from '../../error-block/error-block'
 import { useAppSelector } from '../../../store/hooks'

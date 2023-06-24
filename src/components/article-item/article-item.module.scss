@@ -60,7 +60,6 @@
 
         input[type='checkbox'] + label:before {
           content: '❤';
-          //  top: 0px;
           left: -1px;
           display: block;
           position: absolute;
@@ -102,8 +101,6 @@
   }
   .right-side {
     display: flex;
-    //  flex-flow: row nowrap;
-    //  justify-content: center;
     flex: 0 0 240px;
     position: relative;
   }
@@ -116,9 +113,3 @@
     bottom: 0;
   }
 }
-
-// overflow-wrap: break-word;  /* не поддерживает IE, Firefox; является копией word-wrap */
-// word-wrap: break-word;
-// word-break: keep-all;  /* не поддерживает Opera12.14, значение keep-all не поддерживается IE, Chrome */
-// line-break: loose;  /* нет поддержки для русского языка */
-// -webkit-hyphens: auto; -ms-hyphens: auto; hyphens: auto;  /* значение auto не поддерживается Chrome */

@@ -1,23 +1,14 @@
-import React, { useEffect } from 'react'
-import { Route, Routes, Link } from 'react-router-dom'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 import { useAppSelector } from '../../store/hooks'
 import { InterfaceBtn } from '../interface-btn/interface-btn'
-import { authorType } from '../../types/dataTypes'
 
 import styles from './profile-image.module.scss'
 
-type headerDataType = {
-  user: {
-    username: string
-    email: string
-    token: string
-  }
-}
-
 type profileImage = {
   header: boolean
-  authorDataItem: any
+  authorDataItem: { username: string; image: string }
   created: string
   list: boolean
   slug?: string
@@ -29,7 +20,7 @@ const defaultProps = {
 
 export function ProfileImage({ header, authorDataItem, created, list, slug }: profileImage) {
   const { auth, userData } = useAppSelector((state) => state.user)
-  //   console.log(authorDataItem)
+
   function getDateText() {
     const date = new Date(created)
     const day = String(date.getDate()).padStart(2, '0')
@@ -37,6 +28,7 @@ export function ProfileImage({ header, authorDataItem, created, list, slug }: pr
 
     return `${month} ${day}, ${date.getFullYear()}`
   }
+
   if (header && auth) {
     return (
       <div className={styles['author-header']}>
@@ -58,13 +50,11 @@ export function ProfileImage({ header, authorDataItem, created, list, slug }: pr
   }
 
   const renderBtns = () => {
-    //  console.log(slug)
     if (userData) {
-      // console.log(userData.username, authorDataItem.username)
       if (auth && !list && userData.username === authorDataItem.username) {
         return (
           <div className={styles['interface-btns']}>
-            <InterfaceBtn text="Delete" padding={17} height="31px" click={() => console.log('is delete')} />
+            <InterfaceBtn text="Delete" padding={17} height="31px" />
             <Link to={`/articles/${slug}/edit`}>
               <InterfaceBtn text="Edit" padding={19} height="31px" />
             </Link>

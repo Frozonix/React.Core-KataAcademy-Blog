@@ -1,16 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useEffect } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 import { postArticle } from '../../store/articleSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { InputError } from '../input-error/input-error'
-import { ProfileImage } from '../profile-image/profile-image'
-import { InterfaceBtn } from '../interface-btn/interface-btn'
-import { SubmitBtn } from '../submit-btn/submit-btn'
 import { ReusableForm } from '../reusable-form/reusable-form'
+import { handleSubmitTypeTags } from '../../types/dataTypes'
 
 import styles from './create-new-article-form.module.scss'
 
@@ -21,19 +18,20 @@ export function CreateNewArticleForm() {
   const navigate = useNavigate()
   const { userData } = useAppSelector((state) => state.user)
   const { isRedirectNeeded } = useAppSelector((state) => state.article)
-  const htmlFor = {
+  const htmlFor: handleSubmitTypeTags = {
     title: 'title-new-article',
     shortDescription: 'short-desc-new-article',
     text: 'text-new-article',
-    tag: 'tag-new-article',
+    tags: [],
   }
+
   const {
     register,
     formState: { errors },
     handleSubmit,
     control,
     setValue,
-  } = useForm({ mode: 'onBlur', defaultValues: { tags: [{ tag: '' }] } })
+  } = useForm<handleSubmitTypeTags>({ mode: 'onBlur', defaultValues: { tags: [{ tag: '' }] } })
 
   useEffect(() => {
     if (isRedirectNeeded) {
@@ -41,20 +39,21 @@ export function CreateNewArticleForm() {
     }
   }, [isRedirectNeeded, navigate])
 
-  const myHandleSubmit = (data: any) => {
-    const tagList = data.tags
-      .filter((item: { tag: string }) => item.tag.trim() !== '' && item.tag)
-      .map((item: { tag: string }) => item.tag)
+  const myHandleSubmit = (data: handleSubmitTypeTags) => {
+    let tagList
+    if (Array.isArray(data.tags)) {
+      tagList = data.tags
+        .filter((item: { tag: string }) => item.tag.trim() !== '' && item.tag)
+        .map((item: { tag: string }) => item.tag)
+    }
+
     dispatch(
-      postArticle([
-        {
-          title: data[htmlFor.title],
-          description: data[htmlFor.shortDescription],
-          body: data[htmlFor.text],
-          tagList,
-        },
-        userData.token,
-      ])
+      postArticle({
+        title: data[htmlFor.title.toString()].toString(),
+        description: data[htmlFor.shortDescription.toString()].toString(),
+        body: data[htmlFor.text.toString()].toString(),
+        tagList,
+      })
     )
   }
   if (!userData) {
@@ -66,6 +65,8 @@ export function CreateNewArticleForm() {
         <form id="create-new-article" className={styles.form} onSubmit={handleSubmit(myHandleSubmit)}>
           <ReusableForm
             isCreateArticle
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             htmlFor={htmlFor}
             register={register}
             errors={errors}

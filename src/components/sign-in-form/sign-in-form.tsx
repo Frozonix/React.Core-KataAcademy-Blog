@@ -4,6 +4,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
+import { handleSubmitType } from '../../types/dataTypes'
 import { postLogin } from '../../store/userSlice'
 import { useAppDispatch } from '../../store/hooks'
 import { InputError } from '../input-error/input-error'
@@ -15,17 +16,18 @@ import '../../reusable-styles/list-article-shadow.scss'
 
 export function SignInForm() {
   const dispatch = useAppDispatch()
-  const htmlFor = {
+  const htmlFor: handleSubmitType = {
     email: 'email-auth',
     password: 'password-auth',
   }
+
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm({ mode: 'onBlur' })
+  } = useForm<handleSubmitType>({ mode: 'onBlur' })
 
-  const myHandleSubmit = (data: any) => {
+  const myHandleSubmit = (data: handleSubmitType) => {
     dispatch(
       postLogin({
         email: data[htmlFor.email],

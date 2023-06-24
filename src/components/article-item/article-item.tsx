@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { postLike, deleteLike } from '../../store/userSlice'
@@ -13,7 +13,6 @@ type item = {
   dataItem: articleType
   list: boolean
   keyString?: string
-  //   setLike: (x: boolean) => void
 }
 
 const defaultProps = {
@@ -22,22 +21,16 @@ const defaultProps = {
 
 export function ArticleItem({ dataItem, list, keyString }: item) {
   const { auth } = useAppSelector((state) => state.user)
-  //   console.log(dataItem)
   // eslint-disable-next-line
-  let author, body, createdAt, description, favorited: boolean, favoritesCount, slug: string, tagList, title, updatedAt
-  ;({ author, body, createdAt, description, favorited, favoritesCount, slug, tagList, title, updatedAt } = dataItem)
+  let author, createdAt, description, favorited, favoritesCount, slug: string, tagList, title
+  ;({ author, createdAt, description, favorited, favoritesCount, slug, tagList, title } = dataItem)
   const [like, setLike] = useState<boolean>(favorited)
   const [countLike, setCountLike] = useState<number>(favoritesCount)
-  //   const refLike = useRef(like)
-  useEffect(() => {
-    console.log('hello')
-  }, [like])
-
   const dispatch = useAppDispatch()
   const style = {
     height: list ? '' : '100%',
   }
-  console.log(favorited)
+
   return (
     <div className={list ? `${styles['list-item']} list-article-shadow` : `${styles['list-item']}`} style={style}>
       <div className={styles.wrapper}>
@@ -53,26 +46,17 @@ export function ArticleItem({ dataItem, list, keyString }: item) {
                 onChange={() => {
                   if (auth && !like) {
                     dispatch(postLike(slug))
-                    setLike(
-                      (prevState) => !prevState
-                      //  return !prevState
-                    )
+                    setLike((prevState) => !prevState)
                     setCountLike((prevState) => prevState + 1)
-                    //   console.log('ref like', refLike.current)
                   }
                   if (auth && like) {
                     dispatch(deleteLike(slug))
-                    setLike(
-                      (prevState) => !prevState
-                      //  return !prevState
-                    )
+                    setLike((prevState) => !prevState)
                     setCountLike((prevState) => prevState - 1)
-                    //   console.log('ref ne like', refLike.current)
                   }
                 }}
                 checked={like}
               />
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
               <label htmlFor={`heart${keyString}`}>
                 <span> {countLike}</span>
               </label>

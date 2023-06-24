@@ -11,7 +11,6 @@ type ModalDeleteArticleProps = {
 export function ModalDeleteArticle({ setShowModal }: ModalDeleteArticleProps) {
   const dispatch = useAppDispatch()
   const slug = useLocation().pathname.replace('/articles/', '').replace('/edit', '')
-  const { userData } = useAppSelector((state) => state.user)
   return (
     <div className="modal">
       <div className="modal-arrow" />
@@ -27,7 +26,7 @@ export function ModalDeleteArticle({ setShowModal }: ModalDeleteArticleProps) {
             <button type="button" onClick={() => setShowModal(false)}>
               No
             </button>
-            <button type="button" onClick={() => dispatch(deleteArticle([userData.token, slug]))}>
+            <button type="button" onClick={() => dispatch(deleteArticle(slug))}>
               <Link to="/"> Yes </Link>
             </button>
           </div>

@@ -12,14 +12,6 @@ export function Layout() {
   const dispatch = useAppDispatch()
   const { startRequest } = useAppSelector((state) => state.user)
 
-  //   if (localStorage.getItem('email') && localStorage.getItem('password') && !startRequest) {
-  //     const email = localStorage.getItem('email') || ''
-  //     const password = localStorage.getItem('password') || ''
-  //     dispatch(postLogin({ email, password }))
-  //   } else {
-  //     dispatch(toggleFirstRequest())
-  //   }
-
   useEffect(() => {
     if (localStorage.getItem('email') && localStorage.getItem('password') && !startRequest) {
       const email = localStorage.getItem('email') || ''

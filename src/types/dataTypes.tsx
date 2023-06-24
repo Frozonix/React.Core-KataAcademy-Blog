@@ -27,3 +27,11 @@ export type initType = {
   status: string
   error: string
 }
+
+export type handleSubmitType = {
+  [key: string]: string
+}
+
+export type handleSubmitTypeTags = {
+  [key: string]: string | { tag: string }[] | []
+}

@@ -1,0 +1,54 @@
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-flow: row nowrap;
+  button.left-btn,
+  button.right-btn {
+    font-family: 'Roboto';
+    line-height: 36px;
+    color: rgba(0, 0, 0, 0.75);
+    cursor: pointer;
+    position: relative;
+    border: none;
+    margin: 0 12px;
+  }
+  .left-btn::before {
+    content: '‹';
+    font-size: 40px;
+    color: rgba(0, 0, 0, 0.75);
+    position: absolute;
+    left: 5px;
+    top: -2px;
+  }
+  .right-btn::after {
+    content: '›';
+    font-size: 40px;
+    color: rgba(0, 0, 0, 0.75);
+    position: absolute;
+    right: 5px;
+    top: -2px;
+  }
+  div {
+    button {
+      width: 40px;
+      margin: 0 10px;
+
+      font-family: 'Roboto';
+      font-size: 20px;
+      line-height: 36px;
+
+      color: rgba(0, 0, 0, 0.75);
+      border: none;
+      cursor: pointer;
+    }
+    .disable-page {
+      pointer-events: none;
+      color: rgba(0, 0, 0, 0.4);
+    }
+    .active {
+      color: white;
+      background: #1890ff;
+      border-radius: 4px;
+    }
+  }
+}

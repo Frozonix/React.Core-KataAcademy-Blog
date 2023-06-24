@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Route, Routes, Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { ProfileImage } from '../profile-image/profile-image'
@@ -11,8 +11,6 @@ import styles from './header.module.scss'
 export function Header() {
   const dispatch = useAppDispatch()
   const { auth, userData } = useAppSelector((state) => state.user)
-  console.log(auth)
-  //   const [auth, setAuth] = useState(false)
   useEffect(() => {
     if (auth) {
       dispatch(getUser())
@@ -26,11 +24,9 @@ export function Header() {
             <InterfaceBtn text="Create article" padding={10} height="31px" />
           </Link>
           <ProfileImage header authorDataItem={userData} created="" list={false} />
-          {/* <Link to="/sign-up"> */}
           <button type="button" className={styles['log-out']} onClick={() => dispatch(userLogout())}>
             Log Out
           </button>
-          {/* </Link> */}
         </div>
       )
     }

@@ -1,38 +1,36 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
+import { InputError } from '../input-error/input-error'
 import { putUserData } from '../../store/userSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-// eslint-disable-next-line import/order
-import { InputError } from '../input-error/input-error'
 import '../../reusable-styles/form-errors.scss'
-
 import { SubmitBtn } from '../submit-btn/submit-btn'
+import { handleSubmitType } from '../../types/dataTypes'
 
 import styles from './edit-profile-form.module.scss'
-
 import '../../reusable-styles/list-article-shadow.scss'
 
 export function EditProfileForm() {
   const { userData } = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
-  const htmlFor = {
+  const htmlFor: handleSubmitType = {
     username: 'username-edit-profile',
     email: 'email-edit-profile',
     password: 'password-edit-profile',
     avatar: 'avatar-edit-profile',
   }
+
   const {
     register,
     formState: { errors },
     handleSubmit,
-    getValues,
-  } = useForm({ mode: 'onBlur' })
+  } = useForm<handleSubmitType>({ mode: 'onBlur' })
 
-  const myHandleSubmit = (data: any) => {
+  const myHandleSubmit = (data: handleSubmitType) => {
     const obj = {
       username: data[htmlFor.username],
       email: data[htmlFor.email],
@@ -40,8 +38,7 @@ export function EditProfileForm() {
       avatar: data[htmlFor.avatar],
     }
 
-    const newData = Object.fromEntries(Object.entries(obj).filter(([key, value]) => value !== ''))
-    console.log(newData)
+    const newData = Object.fromEntries(Object.entries(obj).filter((value) => value[1] !== ''))
     dispatch(putUserData(newData))
   }
   if (!userData) {

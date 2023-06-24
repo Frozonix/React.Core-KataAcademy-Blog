@@ -1,15 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect } from 'react'
-import { Link, useLocation, Navigate, useNavigate } from 'react-router-dom'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useLocation, Navigate, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 
+import { handleSubmitTypeTags } from '../../types/dataTypes'
 import { putArticle } from '../../store/articleSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { ProfileImage } from '../profile-image/profile-image'
-import { InterfaceBtn } from '../interface-btn/interface-btn'
-import { SubmitBtn } from '../submit-btn/submit-btn'
 import { ReusableForm } from '../reusable-form/reusable-form'
-import { ModalDeleteArticle } from '../modal-delete-article/modal-delete-article'
 
 import styles from './edit-article-form.module.scss'
 
@@ -19,13 +16,13 @@ export function EditArticleForm() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { userData } = useAppSelector((state) => state.user)
-  const { status, isRedirectNeeded } = useAppSelector((state) => state.article)
+  const { isRedirectNeeded } = useAppSelector((state) => state.article)
   const slug = useLocation().pathname.replace('/articles/', '').replace('/edit', '')
-  const htmlFor = {
+  const htmlFor: handleSubmitTypeTags = {
     title: 'title-new-article',
     shortDescription: 'short-desc-new-article',
     text: 'text-new-article',
-    tag: 'tag-new-article',
+    tags: [],
   }
 
   const {
@@ -34,7 +31,7 @@ export function EditArticleForm() {
     handleSubmit,
     control,
     setValue,
-  } = useForm({ mode: 'onBlur', defaultValues: { tags: [{ tag: '' }] } })
+  } = useForm<handleSubmitTypeTags>({ mode: 'onBlur', defaultValues: { tags: [{ tag: '' }] } })
 
   useEffect(() => {
     if (isRedirectNeeded) {
@@ -42,20 +39,22 @@ export function EditArticleForm() {
     }
   }, [isRedirectNeeded, navigate])
 
-  const myHandleSubmit = (data: any) => {
-    const tagList = data.tags
-      .filter((item: { tag: string }) => item.tag.trim() !== '' && item.tag)
-      .map((item: { tag: string }) => item.tag)
-    console.log(tagList)
+  const myHandleSubmit = (data: handleSubmitTypeTags) => {
+    let tagList
+    if (Array.isArray(data.tags)) {
+      tagList = data.tags
+        .filter((item: { tag: string }) => item.tag.trim() !== '' && item.tag)
+        .map((item: { tag: string }) => item.tag)
+    }
+
     dispatch(
       putArticle([
         {
-          title: data[htmlFor.title],
-          description: data[htmlFor.shortDescription],
-          body: data[htmlFor.text],
+          title: data[htmlFor.title.toString()].toString(),
+          description: data[htmlFor.shortDescription.toString()],
+          body: data[htmlFor.text.toString()],
           tagList,
         },
-        userData.token,
         slug,
       ])
     )
@@ -69,6 +68,8 @@ export function EditArticleForm() {
         <form id="edit-article" className={styles.form} onSubmit={handleSubmit(myHandleSubmit)}>
           <ReusableForm
             isCreateArticle={false}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             htmlFor={htmlFor}
             register={register}
             errors={errors}

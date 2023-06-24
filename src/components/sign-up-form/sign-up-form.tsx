@@ -5,34 +5,32 @@ import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 import { useAppDispatch } from '../../store/hooks'
-// eslint-disable-next-line import/order
 import { postReg } from '../../store/userSlice'
-
-// eslint-disable-next-line import/order
+import { handleSubmitType } from '../../types/dataTypes'
 import { InputError } from '../input-error/input-error'
 import '../../reusable-styles/form-errors.scss'
-
 import { SubmitBtn } from '../submit-btn/submit-btn'
 
 import styles from './sign-up-form.module.scss'
 
 export function SignUpForm() {
   const dispatch = useAppDispatch()
-  const htmlFor = {
+  const htmlFor: handleSubmitType = {
     username: 'username-reg',
     email: 'email-reg',
     password: 'password-reg',
     repeatPassword: 'repeatPassword-reg',
     check: 'check-reg',
   }
+
   const {
     register,
     formState: { errors },
     handleSubmit,
     getValues,
-  } = useForm({ mode: 'onBlur' })
+  } = useForm<handleSubmitType>({ mode: 'onBlur' })
 
-  const myHandleSubmit = (data: any) => {
+  const myHandleSubmit = (data: handleSubmitType) => {
     dispatch(
       postReg({
         username: data[htmlFor.username],

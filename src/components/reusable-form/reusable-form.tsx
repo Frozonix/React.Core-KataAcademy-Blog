@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { useFieldArray } from 'react-hook-form'
 
-import { getArticle, postArticle } from '../../store/articleSlice'
+import { getArticle } from '../../store/articleSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { InputError } from '../input-error/input-error'
-import { ProfileImage } from '../profile-image/profile-image'
 import { InterfaceBtn } from '../interface-btn/interface-btn'
 import { SubmitBtn } from '../submit-btn/submit-btn'
 
@@ -21,12 +21,15 @@ type ReusableFormProps = {
     title: string
     shortDescription: string
     text: string
-    tag: string
+    tags: []
   }
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-nocheck
   register: any
   errors: any
   control: any
   setValue: any
+  // @ts-check
 }
 export function ReusableForm({ isCreateArticle, htmlFor, register, errors, control, setValue }: ReusableFormProps) {
   const dispatch = useAppDispatch()
@@ -61,9 +64,6 @@ export function ReusableForm({ isCreateArticle, htmlFor, register, errors, contr
   }, [data])
 
   const render = () => (
-    //  setValue(htmlFor.title, head)
-    //  setValue(htmlFor.shortDescription, desc)
-    //  setValue(htmlFor.text, body)
     <div className={styles['reusable-form-wrapper']}>
       <div className={styles.title}>
         <h4>{isCreateArticle ? 'Create new article' : 'Edit article'}</h4>
@@ -114,30 +114,18 @@ export function ReusableForm({ isCreateArticle, htmlFor, register, errors, contr
       <div className={`${styles['inputs-wrapper']} ${styles.tags}`}>
         <p>Tags</p>
         <div className={styles['tags-wrapper']}>
-          {fields.map((field, index) => {
-            console.log(fields.length, index + 1)
-            return (
-              <div key={field.id}>
-                <input type="text" placeholder="Tag" {...register(`tags.${index}.tag`)} />
-                {fields.length > 1 && (
-                  <InterfaceBtn text="Delete" padding={37} height="100%" remove={remove} index={index} />
-                )}
+          {fields.map((field, index) => (
+            <div key={field.id}>
+              <input type="text" placeholder="Tag" {...register(`tags.${index}.tag`)} />
+              {fields.length > 1 && (
+                <InterfaceBtn text="Delete" padding={37} height="100%" remove={remove} index={index} />
+              )}
 
-                {fields.length === index + 1 && (
-                  <InterfaceBtn text="Add tag" padding={40} height="100%" append={append} />
-                )}
-              </div>
-            )
-          })}
-          {/* <div>
-            <input type="text" placeholder="Tag" id={`${htmlFor.tag}1`} name={`${htmlFor.tag}1`} />
-            <InterfaceBtn text="Delete" padding={37} height="100%" />
-          </div>
-          <div>
-            <input type="text" placeholder="Tag" id={`${htmlFor.tag}2`} name={`${htmlFor.tag}2`} />
-            <InterfaceBtn text="Delete" padding={37} height="100%" />
-            <InterfaceBtn text="Add tag" padding={40} height="100%" />
-          </div> */}
+              {fields.length === index + 1 && (
+                <InterfaceBtn text="Add tag" padding={40} height="100%" append={append} />
+              )}
+            </div>
+          ))}
         </div>
       </div>
       <div className={styles['submit-wrapper']}>
@@ -145,13 +133,5 @@ export function ReusableForm({ isCreateArticle, htmlFor, register, errors, contr
       </div>
     </div>
   )
-
-  //   if (isCreateArticle) {
-  //     return render()
-  //   }
-  //   if (!isCreateArticle && data) {
-  //     console.log(data)
-  //     return render(data.title, data.description, data.body)
-  //   }
   return render()
 }

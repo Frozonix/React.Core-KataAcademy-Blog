@@ -1,25 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useState } from 'react'
-import { useFieldArray } from 'react-hook-form'
 
 import { ModalDeleteArticle } from '../modal-delete-article/modal-delete-article'
 
 import styles from './interface-btn.module.scss'
 
-useFieldArray
-
 type interfaceBtn = {
   text: string
   padding: number
   height: string
-  click?: () => any | undefined
+  // @ts-ignore
   append?: any
+  // @ts-ignore
   remove?: any
   index?: number
 }
 
 const defaultProps = {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  click: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   append: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -27,8 +25,7 @@ const defaultProps = {
   index: '',
 }
 
-export function InterfaceBtn({ text, padding, height, click, append, remove, index }: interfaceBtn) {
-  //   console.log(remove, index)
+export function InterfaceBtn({ text, padding, height, append, remove, index }: interfaceBtn) {
   const [showModal, setShowModal] = useState<boolean>(false)
   let colorClassName = ''
   if (text === 'Delete') {
@@ -42,11 +39,9 @@ export function InterfaceBtn({ text, padding, height, click, append, remove, ind
       <button
         onClick={() => {
           if (text === 'Delete' && (index || index === 0)) {
-            // console.log(text, padding, height, click, append, remove, index)
             remove(index)
           }
           if (text === 'Delete' && !index) {
-            // console.log(text, padding, height, click, append, remove, index)
             setShowModal(true)
           }
           if (text === 'Add tag') {
