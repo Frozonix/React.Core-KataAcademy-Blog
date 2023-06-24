@@ -23,15 +23,21 @@ type ReusableFormProps = {
     text: string
     tags: []
   }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-nocheck
+  cbTags: (array: string[]) => { tag: string }[]
   register: any
   errors: any
   control: any
   setValue: any
-  // @ts-check
 }
-export function ReusableForm({ isCreateArticle, htmlFor, register, errors, control, setValue }: ReusableFormProps) {
+export function ReusableForm({
+  isCreateArticle,
+  htmlFor,
+  cbTags,
+  register,
+  errors,
+  control,
+  setValue,
+}: ReusableFormProps) {
   const dispatch = useAppDispatch()
   const { data } = useAppSelector((state) => state.article)
   const slug = useLocation().pathname.replace('/articles/', '').replace('/edit', '')
@@ -58,6 +64,7 @@ export function ReusableForm({ isCreateArticle, htmlFor, register, errors, contr
         setValue(htmlFor.title, data.title)
         setValue(htmlFor.shortDescription, data.description)
         setValue(htmlFor.text, data.body)
+        setValue('tags', cbTags(data.tagList) || [{ tag: '' }])
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

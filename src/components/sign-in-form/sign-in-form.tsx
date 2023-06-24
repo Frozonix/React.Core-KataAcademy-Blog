@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
+import { toggleRedirectNeededUser, postLogin } from '../../store/userSlice'
 import { handleSubmitType } from '../../types/dataTypes'
-import { postLogin } from '../../store/userSlice'
 import { useAppDispatch } from '../../store/hooks'
 import { InputError } from '../input-error/input-error'
 import { SubmitBtn } from '../submit-btn/submit-btn'
@@ -16,6 +16,12 @@ import '../../reusable-styles/list-article-shadow.scss'
 
 export function SignInForm() {
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(toggleRedirectNeededUser())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const htmlFor: handleSubmitType = {
     email: 'email-auth',
     password: 'password-auth',

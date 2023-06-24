@@ -13,6 +13,7 @@ type initType = {
   token: string
   status: string
   error: string
+  isRedirectNeeded: boolean
 }
 
 const initialState: initType = {
@@ -22,6 +23,7 @@ const initialState: initType = {
   token: '',
   status: 'ok',
   error: '',
+  isRedirectNeeded: false,
 }
 
 type regDataType = {
@@ -95,6 +97,9 @@ const userSlice = createSlice({
     clearError(state) {
       state.error = ''
     },
+    toggleRedirectNeededUser(state) {
+      state.isRedirectNeeded = false
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(postReg.pending, (state) => {
@@ -104,6 +109,7 @@ const userSlice = createSlice({
       state.status = 'ok'
       state.token = action.payload.user.token
       state.error = ''
+      state.isRedirectNeeded = true
       localStorage.setItem('token', action.payload.user.token)
     })
     /* eslint-disable-next-line */
@@ -156,5 +162,5 @@ const userSlice = createSlice({
   },
 })
 
-export const { userLogout, toggleFirstRequest, clearError } = userSlice.actions
+export const { userLogout, toggleFirstRequest, clearError, toggleRedirectNeededUser } = userSlice.actions
 export default userSlice.reducer

@@ -26,6 +26,7 @@ export function ModalDeleteArticle({ setShowModal }: ModalDeleteArticleProps) {
             <button type="button" onClick={() => setShowModal(false)}>
               No
             </button>
+
             <button type="button" onClick={() => dispatch(deleteArticle(slug))}>
               <Link to="/"> Yes </Link>
             </button>

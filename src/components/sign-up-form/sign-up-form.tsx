@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
-import { useAppDispatch } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { postReg } from '../../store/userSlice'
 import { handleSubmitType } from '../../types/dataTypes'
 import { InputError } from '../input-error/input-error'
@@ -15,6 +15,8 @@ import styles from './sign-up-form.module.scss'
 
 export function SignUpForm() {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const { isRedirectNeeded } = useAppSelector((state) => state.user)
   const htmlFor: handleSubmitType = {
     username: 'username-reg',
     email: 'email-reg',
@@ -29,6 +31,12 @@ export function SignUpForm() {
     handleSubmit,
     getValues,
   } = useForm<handleSubmitType>({ mode: 'onBlur' })
+
+  useEffect(() => {
+    if (isRedirectNeeded) {
+      navigate('/sign-in')
+    }
+  }, [isRedirectNeeded, navigate])
 
   const myHandleSubmit = (data: handleSubmitType) => {
     dispatch(
