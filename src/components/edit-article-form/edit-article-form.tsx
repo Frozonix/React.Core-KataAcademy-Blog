@@ -14,6 +14,7 @@ import styles from './edit-article-form.module.scss'
 import '../../reusable-styles/reg-auth-shadow.scss'
 
 export function EditArticleForm() {
+  const location = useLocation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { userData } = useAppSelector((state) => state.user)
@@ -63,7 +64,7 @@ export function EditArticleForm() {
     )
   }
   if (!userData) {
-    return <Navigate to="/sign-in" replace />
+    return <Navigate to="/sign-in" replace state={{ from: location.pathname }} />
   }
   return (
     <>

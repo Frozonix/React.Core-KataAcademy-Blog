@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 import { InputError } from '../input-error/input-error'
@@ -15,6 +15,7 @@ import styles from './edit-profile-form.module.scss'
 import '../../reusable-styles/list-article-shadow.scss'
 
 export function EditProfileForm() {
+  const location = useLocation()
   const { userData } = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
   const htmlFor: handleSubmitType = {
@@ -42,7 +43,7 @@ export function EditProfileForm() {
     dispatch(putUserData(newData))
   }
   if (!userData) {
-    return <Navigate to="/sign-in" replace />
+    return <Navigate to="/sign-in" replace state={{ from: location.pathname }} />
   }
   return (
     <section className={styles.wrapper}>

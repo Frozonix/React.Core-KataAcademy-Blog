@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
-
 import React, { useEffect } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 import { postArticle } from '../../store/articleSlice'
@@ -14,6 +13,7 @@ import styles from './create-new-article-form.module.scss'
 import '../../reusable-styles/reg-auth-shadow.scss'
 
 export function CreateNewArticleForm() {
+  const location = useLocation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { userData } = useAppSelector((state) => state.user)
@@ -57,7 +57,7 @@ export function CreateNewArticleForm() {
     )
   }
   if (!userData) {
-    return <Navigate to="/sign-in" replace />
+    return <Navigate to="/sign-in" replace state={{ from: location.pathname }} />
   }
   return (
     <section className={styles.wrapper}>

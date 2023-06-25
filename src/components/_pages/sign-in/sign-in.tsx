@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 
 import { clearError } from '../../../store/userSlice'
 import { useAppSelector, useAppDispatch } from '../../../store/hooks'
@@ -10,6 +10,7 @@ import { ErrorBlock } from '../../error-block/error-block'
 export function SignIn() {
   const { status, error, userData } = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
+  const location = useLocation()
 
   useEffect(() => {
     dispatch(clearError())
@@ -31,7 +32,7 @@ export function SignIn() {
     return null
   }
   if (userData) {
-    return <Navigate to="/" replace />
+    return <Navigate to={location.state ? location.state.from : '/'} replace />
   }
   return renderPage()
 }
