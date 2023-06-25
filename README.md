@@ -1,1 +1,1 @@
-https://react-core-kata-academy-blog-git-master-frozonix.vercel.app/
+https://react-core-kata-academy-blog-4b81utuup-frozonix.vercel.app/
